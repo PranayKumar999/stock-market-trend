@@ -1,0 +1,13 @@
+# Network trace and DevTools exports (contains browser headers / cookies)
+*.har
+network.har
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Editor directories
+.vscode/
+.idea/

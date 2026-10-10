@@ -1,37 +1,38 @@
 /* ==========================================================================
    Indian Stock Market: Industry Trend Tracker - Styles
-   Modern Dark Financial Terminal Aesthetic
+   TradingView Themes: Neutral Dark (#131722) & Clean Light (#ffffff)
    ========================================================================== */
 
-:root {
-  --bg-primary: #0a0d14;
-  --bg-secondary: #111726;
-  --bg-card: #151d30;
-  --bg-card-hover: #1b253d;
-  --bg-elevated: #1f2b45;
-  --bg-input: #0f1626;
+:root, [data-theme="dark"] {
+  --bg-primary: #131722;
+  --bg-secondary: #1e222d;
+  --bg-card: #1e222d;
+  --bg-card-hover: #2a2e39;
+  --bg-elevated: #2a2e39;
+  --bg-input: #131722;
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.15);
-  --border-focus: #3b82f6;
+  --border-subtle: #2a2e39;
+  --border-light: #363a45;
+  --border-focus: #2962ff;
 
-  --text-main: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-main: #d1d4dc;
+  --text-secondary: #787b86;
+  --text-muted: #5d606b;
 
-  --accent-blue: #3b82f6;
-  --accent-cyan: #06b6d4;
-  --bullish: #10b981;
-  --bullish-bg: rgba(16, 185, 129, 0.12);
-  --bearish: #ef4444;
-  --bearish-bg: rgba(239, 68, 68, 0.12);
-  --neutral: #9ca3af;
-  --neutral-bg: rgba(156, 163, 175, 0.12);
+  --accent-blue: #2962ff;
+  --accent-cyan: #22ab94;
+  --bullish: #089981;
+  --bullish-bg: rgba(8, 153, 129, 0.15);
+  --bearish: #f23645;
+  --bearish-bg: rgba(242, 54, 69, 0.15);
+  --neutral: #787b86;
+  --neutral-bg: rgba(120, 123, 134, 0.15);
 
   --dma-50: #f59e0b;
   --dma-50-bg: rgba(245, 158, 11, 0.15);
   --dma-200: #a855f7;
   --dma-200-bg: rgba(168, 85, 247, 0.15);
+  --dma-200-line: #ffffff;
 
   --cap-large: #38bdf8;
   --cap-large-bg: rgba(56, 189, 248, 0.15);
@@ -41,16 +42,67 @@
   --cap-small-bg: rgba(251, 146, 60, 0.15);
 
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
 
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f0f3fa;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f9fd;
+  --bg-elevated: #f0f3fa;
+  --bg-input: #ffffff;
+
+  --border-subtle: #e0e3eb;
+  --border-light: #d1d4dc;
+  --border-focus: #2962ff;
+
+  --text-main: #131722;
+  --text-secondary: #606266;
+  --text-muted: #9598a1;
+
+  --accent-blue: #2962ff;
+  --accent-cyan: #00897b;
+  --bullish: #089981;
+  --bullish-bg: rgba(8, 153, 129, 0.12);
+  --bearish: #f23645;
+  --bearish-bg: rgba(242, 54, 69, 0.12);
+  --neutral: #787b86;
+  --neutral-bg: rgba(120, 123, 134, 0.12);
+
+  --dma-50: #d97706;
+  --dma-50-bg: rgba(217, 119, 6, 0.12);
+  --dma-200: #9333ea;
+  --dma-200-bg: rgba(147, 51, 234, 0.12);
+  --dma-200-line: #131722;
+
+  --cap-large: #0284c7;
+  --cap-large-bg: rgba(2, 132, 199, 0.12);
+  --cap-mid: #7c3aed;
+  --cap-mid-bg: rgba(124, 58, 237, 0.12);
+  --cap-small: #ea580c;
+  --cap-small-bg: rgba(234, 88, 12, 0.12);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.12);
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
 }
 
 * {
@@ -77,11 +129,11 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #23304c;
+  background: var(--border-light);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e3e63;
+  background: var(--text-muted);
 }
 
 /* Layout */
@@ -125,9 +177,7 @@ body {
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  background: linear-gradient(180deg, #ffffff, #d1d5db);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-main);
 }
 
 .brand-subtitle {
@@ -239,7 +289,7 @@ body {
 
 .filter-btn.active {
   background: var(--bg-card);
-  color: #fff;
+  color: var(--text-main);
   box-shadow: var(--shadow-sm);
 }
 
@@ -441,7 +491,7 @@ body {
 .industry-name {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
@@ -595,7 +645,7 @@ body {
 
 .market-table th {
   background: var(--bg-secondary);
-  padding: 14px 16px;
+  padding: 13px 16px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -604,11 +654,67 @@ body {
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
   user-select: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sortable-th {
   cursor: pointer;
 }
 
-.market-table th:hover {
+.sortable-th:hover {
   color: var(--text-main);
+  background: var(--bg-card-hover);
+}
+
+.sortable-th.active-th {
+  color: var(--text-main);
+}
+
+.th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sort-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sort-chevron-icon {
+  width: 9px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  opacity: 0.35;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.sortable-th:hover .sort-chevron-icon {
+  opacity: 0.75;
+}
+
+.sort-icon-wrapper.active-sort .sort-chevron-icon {
+  opacity: 1;
+}
+
+.sort-icon-wrapper.active-sort.asc .chevron-up {
+  color: var(--accent-blue);
+  stroke: var(--accent-blue);
+  opacity: 1;
+}
+.sort-icon-wrapper.active-sort.asc .chevron-down {
+  opacity: 0.18;
+}
+
+.sort-icon-wrapper.active-sort.desc .chevron-down {
+  color: var(--accent-blue);
+  stroke: var(--accent-blue);
+  opacity: 1;
+}
+.sort-icon-wrapper.active-sort.desc .chevron-up {
+  opacity: 0.18;
 }
 
 .market-table td {
@@ -623,7 +729,7 @@ body {
 
 .table-industry-title {
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -684,7 +790,7 @@ body {
 .modal-title-group h2 {
   font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -706,7 +812,7 @@ body {
   border-radius: 4px;
 }
 .modal-close-btn:hover {
-  color: #fff;
+  color: var(--text-main);
   background: var(--bg-elevated);
 }
 
@@ -740,6 +846,7 @@ body {
   font-size: 16px;
   font-weight: 700;
   font-family: var(--font-mono);
+  color: var(--text-main);
   margin-top: 2px;
 }
 
@@ -782,10 +889,14 @@ body {
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
-.tf-btn.active {
+.tf-btn.active, .range-btn.active {
   background: var(--accent-blue);
   color: #fff;
   border-color: var(--accent-blue);
+}
+.interval-btn.active {
+  background: var(--accent-blue) !important;
+  color: #fff !important;
 }
 
 .chart-canvas-container {
@@ -821,7 +932,7 @@ body {
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: var(--text-main);
   font-size: 13px;
   font-family: var(--font-mono);
   outline: none;
@@ -846,12 +957,12 @@ body {
 .alert-error {
   background: var(--bearish-bg);
   border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
+  color: var(--bearish);
 }
 .alert-success {
   background: var(--bullish-bg);
   border: 1px solid rgba(16, 185, 129, 0.4);
-  color: #6ee7b7;
+  color: var(--bullish);
 }
 
 .constituents-table-container {

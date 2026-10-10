@@ -40,7 +40,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Financials",
     marketCap: "Mid",
     description: "Registrar, payment processors, insurance portals and retail fintech",
-    tickers: ["CAMS.NS", "KFINTECH.NS", "PBFINTECH.NS", "ANGELONE.NS"]
+    tickers: ["CAMS.NS", "KFINTECH.NS", "POLICYBZR.NS", "ANGELONE.NS"]
   },
   {
     id: "telecom-services",
@@ -130,7 +130,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Financials",
     marketCap: "Large",
     description: "Govt-backed non-banking financiers funding energy, railway and highways",
-    tickers: ["PFC.NS", "REC.NS", "IRFC.NS", "HUDCO.NS"]
+    tickers: ["PFC.NS", "RECLTD.NS", "IRFC.NS", "HUDCO.NS"]
   },
   {
     id: "nbfc-vehicle-equipment",
@@ -236,7 +236,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Automotive",
     marketCap: "Small",
     description: "Lead-acid and advanced lithium battery storage manufacturers",
-    tickers: ["EXIDEIND.NS", "AMARAJABAT.NS", "HBLPOWER.NS"]
+    tickers: ["EXIDEIND.NS", "AMARAJABAT.NS", "HBLENGINE.NS"]
   },
   {
     id: "auto-forgings-precision",
@@ -344,7 +344,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Capital Goods",
     marketCap: "Small",
     description: "Power transformers, distribution transformers and switchgear protection",
-    tickers: ["VOLTAMP.NS", "TRIL.NS", "SCHNEIDER.NS", "HITACHIENG.NS"]
+    tickers: ["VOLTAMP.NS", "TARIL.NS", "SCHNEIDER.NS", "HITACHIENG.NS"]
   },
   {
     id: "industrial-bearings",
@@ -410,7 +410,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Metals & Mining",
     marketCap: "Large",
     description: "Thermal coal extraction, iron ore pellets and lignite extraction",
-    tickers: ["COALINDIA.NS", "NMDC.NS", "MOIL.NS", "GMDC.NS"]
+    tickers: ["COALINDIA.NS", "NMDC.NS", "MOIL.NS", "GMDCLTD.NS"]
   },
   {
     id: "ferro-alloys-recycling",
@@ -436,7 +436,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Chemicals",
     marketCap: "Mid",
     description: "Fluoropolymer resins, battery electrolytes and next-gen cooling refrigerants",
-    tickers: ["SRF.NS", "NAVINFLUOR.NS", "GUJFLUORO.NS"]
+    tickers: ["SRF.NS", "NAVINFLUOR.NS", "FLUOROCHEM.NS"]
   },
   {
     id: "specialty-chemicals-fine-aroma",
@@ -452,7 +452,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Chemicals",
     marketCap: "Mid",
     description: "Caustic soda lye, chlorine derivatives, calcium chloride and soda ash",
-    tickers: ["TATACHEM.NS", "DEEPAKNTR.NS", "GHCL.NS", "DCMSRIRAM.NS"]
+    tickers: ["TATACHEM.NS", "DEEPAKNTR.NS", "GHCL.NS", "DCMSHRIRAM.NS"]
   },
   {
     id: "chemicals-dyes-pigments",
@@ -460,7 +460,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Chemicals",
     marketCap: "Small",
     description: "Organic pigments, textile reactive dyes and plastic colorants",
-    tickers: ["SUDARSCHEM.NS", "BODALCHEM.NS", "MEGH.NS", "ASAHISONG.NS"]
+    tickers: ["SUDARSCHEM.NS", "BODALCHEM.NS", "MOL.NS", "ASAHISONG.NS"]
   },
   {
     id: "polymers-plastic-pipes",
@@ -658,7 +658,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Consumer Discretionary",
     marketCap: "Mid",
     description: "Pizza delivery franchises, burger chains, fried chicken and cafe outlets",
-    tickers: ["JUBLFOOD.NS", "DEVYANI.NS", "WESTLIFE.NS", "SAPPHIRE.NS", "BARBEQUE.NS"]
+    tickers: ["JUBLFOOD.NS", "DEVYANI.NS", "WESTLIFE.NS", "SAPPHIRE.NS", "UFBL.NS"]
   },
   {
     id: "luggage-travel-accessories",
@@ -724,7 +724,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Building Materials",
     marketCap: "Large",
     description: "Architectural decorative emulsions, wood finishes and industrial primers",
-    tickers: ["ASIANPAINT.NS", "BERGEPAINT.NS", "KANSAINER.NS", "AKZOINDIA.NS", "INDIGOPNTS.NS"]
+    tickers: ["ASIANPAINT.NS", "BERGEPAINT.NS", "KANSAINER.NS", "JSWDULUX.NS", "INDIGOPNTS.NS"]
   },
   {
     id: "plywood-laminates-mdf",
@@ -758,7 +758,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Energy",
     marketCap: "Mid",
     description: "Piped domestic kitchen gas and compressed natural gas vehicle filling pumps",
-    tickers: ["IGL.NS", "MGL.NS", "GUJGASLTD.NS", "ATGL.NS"]
+    tickers: ["IGL.NS", "MGL.NS", "GUJENERGY.NS", "ATGL.NS"]
   },
   {
     id: "natural-gas-transmission-lng",
@@ -766,7 +766,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Energy",
     marketCap: "Large",
     description: "Cross-country natural gas pipeline network and imported LNG cryogenic tanks",
-    tickers: ["GAIL.NS", "PETRONET.NS", "GSPL.NS"]
+    tickers: ["GAIL.NS", "PETRONET.NS", "AEGISLOG.NS"]
   },
   {
     id: "power-generation-thermal-hydro",
@@ -956,7 +956,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Petrochemicals",
     marketCap: "Mid",
     description: "Automotive engine oils, synthetic transmission fluids and high-temp greases",
-    tickers: ["CASTROLIND.NS", "GULFOILLUB.NS", "TIDEWATER.NS"]
+    tickers: ["CASTROLIND.NS", "GULFOILLUB.NS", "VEEDOL.NS"]
   },
   {
     id: "rubber-hoses-conveyors",
@@ -964,7 +964,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Industrial",
     marketCap: "Small",
     description: "Mining conveyor belts, hydraulic rubber hoses and automotive transmission v-belts",
-    tickers: ["PIXTRANS.NS", "INDRATING.NS", "HINDCOMPOS.NS"]
+    tickers: ["PIXTRANS.NS", "INTLCONV.NS", "HINDCOMPOS.NS"]
   },
   {
     id: "industrial-insulators-refractories",
@@ -1028,7 +1028,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Packaging",
     marketCap: "Small",
     description: "Electrolytic tinplate sheets, edible oil metal cans and pesticide containers",
-    tickers: ["TINPLATE.NS", "BALKRISHNA.NS"]
+    tickers: ["TCPLPACK.NS", "BALKRISHNA.NS"]
   },
   {
     id: "education-edtech-services",
@@ -1036,7 +1036,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Services",
     marketCap: "Small",
     description: "Coaching centers, test-preparation and vocational skill development",
-    tickers: ["CAREERP.NS", "ZEELEARN.NS"]
+    tickers: ["CPEDU.NS", "ZEELEARN.NS"]
   },
   {
     id: "renewable-solar-glass",
@@ -1060,7 +1060,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Capital Goods",
     marketCap: "Small",
     description: "Kavach automatic train protection systems and electronic interlocking",
-    tickers: ["KERNEX.NS", "HBLPOWER.NS"]
+    tickers: ["KERNEX.NS", "HBLENGINE.NS"]
   },
   {
     id: "logistics-cold-chain",
@@ -1084,7 +1084,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Financials",
     marketCap: "Mid",
     description: "Retail credit scores, risk underwriting APIs and fraud monitoring bourses",
-    tickers: ["CRISIL.NS", "ICRA.NS", "CAREERP.NS"]
+    tickers: ["CRISIL.NS", "ICRA.NS", "CARERATING.NS"]
   },
   {
     id: "auto-transmission-gears",
@@ -1108,7 +1108,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Agriculture",
     marketCap: "Small",
     description: "Assam and Darjeeling single-estate orthodox black and green teas",
-    tickers: ["JAYAGRO.NS", "ROSSERLTD.NS", "GOODRICKE.NS"]
+    tickers: ["CCL.NS", "ROSSELLIND.NS", "GOODRICKE.BO"]
   },
   {
     id: "industrial-textiles-yarn",
@@ -1140,7 +1140,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Chemicals",
     marketCap: "Small",
     description: "Color masterbatches, engineering plastics and filler compounds",
-    tickers: ["PLASTIBLEN.NS", "PODDAR.NS"]
+    tickers: ["PLASTIBLEN.NS", "PODDARMENT.NS"]
   },
   {
     id: "pharma-veterinary-animal",
@@ -1148,7 +1148,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Healthcare",
     marketCap: "Small",
     description: "Livestock antibiotics, cattle feed supplements and poultry medicines",
-    tickers: ["HESTERBIO.NS", "SEQUENT.NS"]
+    tickers: ["HESTERBIO.NS", "VIYASH.NS"]
   },
   {
     id: "heavy-earthmoving-mining-machinery",
@@ -1164,7 +1164,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Metals & Mining",
     marketCap: "Small",
     description: "Ilmenite, rutile sands, zircon and rare earth mineral processing",
-    tickers: ["GMDC.NS", "NMDC.NS"]
+    tickers: ["GMDCLTD.NS", "NMDC.NS"]
   },
   {
     id: "printing-security-currency",
@@ -1212,7 +1212,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Consumer Discretionary",
     marketCap: "Small",
     description: "Orthopedic memory foam mattresses and PU foam insulation",
-    tickers: ["SHEELA.NS"]
+    tickers: ["SFL.NS"]
   },
   {
     id: "auto-safety-airbags",
@@ -1244,7 +1244,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Automotive",
     marketCap: "Small",
     description: "Heavy hydraulic tipping bodies, road tankers and container trailer beds",
-    tickers: ["AUTOMB.NS", "JAYBARMAR.NS"]
+    tickers: ["ACGL.NS", "JAYBARMARU.NS"]
   },
   {
     id: "chemicals-cellulose-derivatives",
@@ -1260,7 +1260,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Capital Goods",
     marketCap: "Small",
     description: "Grid-tied solar inverters, home sine wave UPS and EV charging stations",
-    tickers: ["SERVO.NS", "VGUARD.NS"]
+    tickers: ["SERVOTECH.NS", "VGUARD.NS"]
   },
   {
     id: "consumer-fans-lighting-luminaires",
@@ -1276,7 +1276,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Consumer Discretionary",
     marketCap: "Small",
     description: "Shankar-6 cotton lint ginning, pressing and seed oil extraction",
-    tickers: ["PASUPATI.NS", "NAHARSPING.NS"]
+    tickers: ["PASUPTAC.NS", "NAHARSPING.NS"]
   },
   {
     id: "agri-micro-irrigation-drip",
@@ -1308,7 +1308,7 @@ window.DEFAULT_INDUSTRIES = [
     sector: "Financials",
     marketCap: "Mid",
     description: "Debt instrument credit rating and bank loan rating assessment",
-    tickers: ["CRISIL.NS", "ICRA.NS", "CAREERP.NS"]
+    tickers: ["CRISIL.NS", "ICRA.NS", "CARERATING.NS"]
   },
   {
     id: "specialty-industrial-filters",
