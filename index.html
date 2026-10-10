@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Indian Stock Market — Industry Trend Tracker (50 & 200 DMA)</title>
-  <meta name="description" content="Track 120+ Indian stock market industries trend, 50 DMA, 200 DMA, momentum and market breadth with customizable constituents.">
+  <meta name="description" content="Track 170+ Indian stock market industries trend, 50 DMA, 200 DMA, momentum and market breadth with customizable constituents.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3ClinearGradient id='area' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322c55e' stop-opacity='0.4'/%3E%3Cstop offset='100%25' stop-color='%2322c55e' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M10 50 L24 38 L36 44 L54 18 L54 50 Z' fill='url(%23area)'/%3E%3Cpath d='M10 50 L24 38 L36 44 L54 18' fill='none' stroke='%23ffffff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='54' cy='18' r='4.5' fill='%2322c55e' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
   <!-- TradingView Lightweight Charts (Pinned to 4.2.1 for maximum stability) -->
   <script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
@@ -14,10 +16,22 @@
     <!-- Header -->
     <header class="app-header">
       <div class="brand-section">
-        <div class="brand-icon">📈</div>
+        <div class="brand-icon">
+          <svg width="26" height="26" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L24 38 L36 44 L54 18 L54 50 Z" fill="url(#brandArea)"/>
+            <path d="M10 50 L24 38 L36 44 L54 18" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="54" cy="18" r="4.5" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
+            <defs>
+              <linearGradient id="brandArea" x1="0" y1="0" x2="0" y2="50" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#22c55e" stop-opacity="0.45"/>
+                <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
         <div>
           <h1 class="brand-title">Indian Industry Trend Tracker</h1>
-          <p class="brand-subtitle">120+ Sectors & Industries • 50 DMA & 200 DMA Breadth • Large, Mid & Small Cap</p>
+          <p class="brand-subtitle">170+ Sectors & Industries • 50 DMA & 200 DMA Breadth • Large, Mid & Small Cap</p>
         </div>
       </div>
 

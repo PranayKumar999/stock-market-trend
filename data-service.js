@@ -109,6 +109,7 @@ class DataService {
       "STERLTD": "STERTOOLS.NS",
       "TATASTEELSL": "TATASTEEL.NS",
       "JMCPROJECT": "KPIL.NS",
+      "RENAISSANCE": "RGL.NS",
 
       // Primary BSE tickers
       "HAWKINS": "HAWKINCOOK.BO",
