@@ -825,6 +825,7 @@ class IndustryTrendApp {
             <th>Stock Symbol</th>
             <th>Latest Close</th>
             <th>50 DMA Diff</th>
+            <th>200 DMA Diff</th>
             <th>1M Return</th>
             <th>History</th>
             <th>Action</th>
@@ -835,6 +836,7 @@ class IndustryTrendApp {
             const info = map.get(sym);
             const price = info ? `₹${info.latestPrice}` : "Fetching...";
             const diff50 = info ? `${info.pctDiff50 >= 0 ? '+' : ''}${info.pctDiff50}%` : "--";
+            const diff200 = info ? `${info.pctDiff200 >= 0 ? '+' : ''}${info.pctDiff200}%` : "--";
             const r1m = info ? `${info.return1M >= 0 ? '+' : ''}${info.return1M}%` : "--";
             const days = info?.totalCandles ? `${info.totalCandles} trading days` : "Verifying...";
 
@@ -843,6 +845,7 @@ class IndustryTrendApp {
                 <td><strong>${sym.replace('.NS', '')}</strong> <span style="font-size:11px; color:var(--text-muted);">${sym}</span></td>
                 <td style="font-family:var(--font-mono);">${price}</td>
                 <td style="font-family:var(--font-mono);" class="${info?.pctDiff50 >= 0 ? 'metric-positive' : 'metric-negative'}">${diff50}</td>
+                <td style="font-family:var(--font-mono);" class="${info?.pctDiff200 >= 0 ? 'metric-positive' : 'metric-negative'}">${diff200}</td>
                 <td style="font-family:var(--font-mono);" class="${info?.return1M >= 0 ? 'metric-positive' : 'metric-negative'}">${r1m}</td>
                 <td><span class="stock-chip" style="color:var(--bullish);">${days}</span></td>
                 <td><button class="btn-remove" data-symbol="${sym}">Remove</button></td>

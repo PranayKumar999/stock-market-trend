@@ -26,6 +26,27 @@ const TechMath = {
   },
 
   /**
+   * Calculates percentage return over a calendar time horizon (1W, 1M, 3M, 1Y)
+   * Matches Yahoo Finance range start calculation
+   */
+  getReturnByCalendarDate(dates, values, monthsBack = 0, daysBack = 0, yearsBack = 0) {
+    if (!dates || !values || dates.length === 0 || values.length === 0) return 0;
+    const latestDateStr = dates[dates.length - 1];
+    const latestVal = values[values.length - 1];
+    if (typeof latestVal !== 'number' || isNaN(latestVal) || latestVal === 0) return 0;
+
+    const [y, m, d] = latestDateStr.split('-').map(Number);
+    const targetDate = new Date(Date.UTC(y - yearsBack, m - 1 - monthsBack, d - daysBack));
+    const targetDateStr = targetDate.toISOString().split('T')[0];
+
+    const idx = dates.findIndex(dt => dt >= targetDateStr);
+    const refVal = (idx !== -1 && idx < values.length) ? values[idx] : values[0];
+    if (typeof refVal !== 'number' || isNaN(refVal) || refVal === 0) return 0;
+
+    return Number((((latestVal - refVal) / refVal) * 100).toFixed(2));
+  },
+
+  /**
    * Aggregates daily series into weekly bars (Friday close & sum volume)
    */
   convertToWeekly(dailyDates, dailyValues, dailyVolumes) {
@@ -223,6 +244,7 @@ const TechMath = {
 
     validTickers.forEach(sym => {
       const candles = stockCandlesMap[sym];
+      const stockDates = candles.map(c => c.date);
       const closes = candles.map(c => c.close);
       const stock50 = this.calculateSMA(closes, 50);
       const stock200 = this.calculateSMA(closes, 200);
@@ -239,8 +261,7 @@ const TechMath = {
       const pctDiff50 = latest50 ? Number((((latestPrice - latest50) / latest50) * 100).toFixed(2)) : 0;
       const pctDiff200 = latest200 ? Number((((latestPrice - latest200) / latest200) * 100).toFixed(2)) : 0;
 
-      const prev1M = closes.length >= 22 ? closes[closes.length - 22] : closes[0];
-      const return1M = Number((((latestPrice - prev1M) / prev1M) * 100).toFixed(2));
+      const return1M = this.getReturnByCalendarDate(stockDates, closes, 1, 0, 0);
 
       constituentsAnalysis.push({
         symbol: sym,
@@ -269,10 +290,10 @@ const TechMath = {
     const pctDiff50 = latest50 ? Number((((latestVal - latest50) / latest50) * 100).toFixed(2)) : 0;
     const pctDiff200 = latest200 ? Number((((latestVal - latest200) / latest200) * 100).toFixed(2)) : 0;
 
-    const ret1W = dn >= 6 ? Number((((latestVal - dailyValues[dn - 6]) / dailyValues[dn - 6]) * 100).toFixed(2)) : 0;
-    const ret1M = dn >= 22 ? Number((((latestVal - dailyValues[dn - 22]) / dailyValues[dn - 22]) * 100).toFixed(2)) : 0;
-    const ret3M = dn >= 64 ? Number((((latestVal - dailyValues[dn - 64]) / dailyValues[dn - 64]) * 100).toFixed(2)) : 0;
-    const ret1Y = dn >= 252 ? Number((((latestVal - dailyValues[dn - 252]) / dailyValues[dn - 252]) * 100).toFixed(2)) : 0;
+    const ret1W = this.getReturnByCalendarDate(dailyDates, dailyValues, 0, 7, 0);
+    const ret1M = this.getReturnByCalendarDate(dailyDates, dailyValues, 1, 0, 0);
+    const ret3M = this.getReturnByCalendarDate(dailyDates, dailyValues, 3, 0, 0);
+    const ret1Y = this.getReturnByCalendarDate(dailyDates, dailyValues, 0, 0, 1);
 
     let trend = "NEUTRAL";
     if (latest50 && latest200) {
@@ -322,4 +343,5 @@ const TechMath = {
   }
 };
 
-window.TechMath = TechMath;
+if (typeof window !== "undefined") window.TechMath = TechMath;
+if (typeof module !== "undefined" && module.exports) module.exports = TechMath;
