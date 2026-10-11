@@ -522,6 +522,8 @@ body {
 .badge-bullish { background: var(--bullish-bg); color: var(--bullish); border: 1px solid rgba(16, 185, 129, 0.3); }
 .badge-bearish { background: var(--bearish-bg); color: var(--bearish); border: 1px solid rgba(239, 68, 68, 0.3); }
 .badge-neutral { background: var(--neutral-bg); color: var(--neutral); border: 1px solid rgba(156, 163, 175, 0.3); }
+.badge-benchmark { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); }
+[data-theme="light"] .badge-benchmark { background: rgba(79, 70, 229, 0.12); color: #4338ca; border: 1px solid rgba(79, 70, 229, 0.3); }
 
 /* DMA Meters */
 .dma-metrics-grid {
@@ -645,7 +647,7 @@ body {
 
 .market-table th {
   background: var(--bg-secondary);
-  padding: 13px 16px;
+  padding: 12px 12px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -718,7 +720,7 @@ body {
 }
 
 .market-table td {
-  padding: 14px 16px;
+  padding: 12px 12px;
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
 }
@@ -738,6 +740,44 @@ body {
 .table-num {
   font-family: var(--font-mono);
   font-weight: 600;
+}
+
+/* Benchmark Row & Card Styling */
+.benchmark-row td {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.benchmark-row:hover td {
+  background: rgba(99, 102, 241, 0.1) !important;
+}
+
+.benchmark-row td:first-child {
+  border-left: 3.5px solid #6366f1;
+}
+
+.benchmark-pin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #818cf8;
+}
+
+.benchmark-card {
+  border: 1px solid rgba(99, 102, 241, 0.35) !important;
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.07) 0%, var(--bg-card) 45%);
+  position: relative;
+}
+
+.benchmark-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #38bdf8);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 /* ==========================================================================

@@ -43,6 +43,8 @@ class DataService {
   normalizeSymbol(raw) {
     if (!raw) return "";
     const trimmed = raw.trim().toUpperCase();
+    if (trimmed.startsWith("^")) return trimmed;
+    if (trimmed === "NIFTY_MIDCAP_100" || trimmed === "NIFTY_SMALLCAP_100") return trimmed;
     const isBSE = trimmed.endsWith(".BO");
     let clean = trimmed.replace(".NS", "").replace(".BO", "");
 
@@ -168,6 +170,13 @@ class DataService {
   async getStockCandles(rawSymbol, forceRefresh = false) {
     const symbol = this.normalizeSymbol(rawSymbol);
 
+    if (symbol === "NIFTY_MIDCAP_100") {
+      return this.getBenchmarkMidcap100(forceRefresh);
+    }
+    if (symbol === "NIFTY_SMALLCAP_100") {
+      return this.getBenchmarkSmallcap100(forceRefresh);
+    }
+
     if (!forceRefresh && this.memoryCache.has(symbol)) {
       return this.memoryCache.get(symbol);
     }
@@ -212,6 +221,126 @@ class DataService {
 
     this.inFlightRequests.set(symbol, fetchPromise);
     return fetchPromise;
+  }
+
+  /**
+   * Fetches and scales Midcap 100 benchmark candles using MOM100.NS / NIFTYMIDCAP150.NS
+   */
+  async getBenchmarkMidcap100(forceRefresh = false) {
+    const symbol = "NIFTY_MIDCAP_100";
+    if (!forceRefresh && this.memoryCache.has(symbol)) return this.memoryCache.get(symbol);
+    await this.initDB();
+    if (!forceRefresh) {
+      const cached = await this.getFromDB(symbol);
+      if (cached && this.isCacheValid(cached)) {
+        this.memoryCache.set(symbol, cached.candles);
+        return cached.candles;
+      }
+    }
+
+    try {
+      let histCandles = await this.getStockCandles("MOM100.NS", forceRefresh);
+      if (!histCandles || histCandles.length < 30) {
+        histCandles = await this.getStockCandles("NIFTYMIDCAP150.NS", forceRefresh);
+      }
+
+      if (histCandles && histCandles.length >= 30) {
+        let latestPrice = 58787.3;
+        try {
+          const qRes = await fetch("https://query1.finance.yahoo.com/v8/finance/chart/NIFTY_MIDCAP_100.NS", { signal: AbortSignal.timeout(4000) });
+          if (qRes.ok) {
+            const qData = await qRes.json();
+            const p = qData?.chart?.result?.[0]?.meta?.regularMarketPrice;
+            if (p && !isNaN(p)) latestPrice = p;
+          }
+        } catch (e) {}
+
+        const lastClose = histCandles[histCandles.length - 1].close;
+        const scale = latestPrice / (lastClose || 1);
+
+        const scaledCandles = histCandles.map(c => ({
+          date: c.date,
+          open: Number((c.open * scale).toFixed(2)),
+          high: Number((c.high * scale).toFixed(2)),
+          low: Number((c.low * scale).toFixed(2)),
+          close: Number((c.close * scale).toFixed(2)),
+          volume: c.volume || 0
+        }));
+
+        await this.saveToDB(symbol, scaledCandles);
+        this.memoryCache.set(symbol, scaledCandles);
+        return scaledCandles;
+      }
+    } catch (err) {
+      console.warn("Failed to build NIFTY_MIDCAP_100 candles:", err);
+    }
+
+    const stale = await this.getFromDB(symbol);
+    if (stale && stale.candles) {
+      this.memoryCache.set(symbol, stale.candles);
+      return stale.candles;
+    }
+    return null;
+  }
+
+  /**
+   * Fetches and scales Smallcap 100 benchmark candles using SML100CASE.NS / HDFCSML250.NS
+   */
+  async getBenchmarkSmallcap100(forceRefresh = false) {
+    const symbol = "NIFTY_SMALLCAP_100";
+    if (!forceRefresh && this.memoryCache.has(symbol)) return this.memoryCache.get(symbol);
+    await this.initDB();
+    if (!forceRefresh) {
+      const cached = await this.getFromDB(symbol);
+      if (cached && this.isCacheValid(cached)) {
+        this.memoryCache.set(symbol, cached.candles);
+        return cached.candles;
+      }
+    }
+
+    try {
+      let histCandles = await this.getStockCandles("SML100CASE.NS", forceRefresh);
+      if (!histCandles || histCandles.length < 30) {
+        histCandles = await this.getStockCandles("HDFCSML250.NS", forceRefresh);
+      }
+
+      if (histCandles && histCandles.length >= 30) {
+        let latestPrice = 19153.7;
+        try {
+          const qRes = await fetch("https://query1.finance.yahoo.com/v8/finance/chart/%5ECNXSC", { signal: AbortSignal.timeout(4000) });
+          if (qRes.ok) {
+            const qData = await qRes.json();
+            const p = qData?.chart?.result?.[0]?.meta?.regularMarketPrice;
+            if (p && !isNaN(p)) latestPrice = p;
+          }
+        } catch (e) {}
+
+        const lastClose = histCandles[histCandles.length - 1].close;
+        const scale = latestPrice / (lastClose || 1);
+
+        const scaledCandles = histCandles.map(c => ({
+          date: c.date,
+          open: Number((c.open * scale).toFixed(2)),
+          high: Number((c.high * scale).toFixed(2)),
+          low: Number((c.low * scale).toFixed(2)),
+          close: Number((c.close * scale).toFixed(2)),
+          volume: c.volume || 0
+        }));
+
+        await this.saveToDB(symbol, scaledCandles);
+        this.memoryCache.set(symbol, scaledCandles);
+        return scaledCandles;
+      }
+    } catch (err) {
+      console.warn("Failed to build NIFTY_SMALLCAP_100 candles:", err);
+    }
+
+    const stale = await this.getFromDB(symbol);
+    if (stale && stale.candles) {
+      this.memoryCache.set(symbol, stale.candles);
+      return stale.candles;
+    }
+    return null;
   }
 
   /**

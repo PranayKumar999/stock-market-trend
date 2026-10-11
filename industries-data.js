@@ -2537,3 +2537,43 @@ window.DEFAULT_INDUSTRIES = [
     ]
   }
 ];
+
+window.BENCHMARK_INDICES = [
+  {
+    id: "benchmark-nifty-50",
+    name: "NIFTY 50",
+    sector: "NSE Benchmark",
+    marketCap: "Large",
+    description: "Benchmark index representing 50 of the largest and most liquid Indian blue-chip companies on NSE.",
+    isBenchmark: true,
+    symbol: "^NSEI",
+    tickers: ["^NSEI"]
+  },
+  {
+    id: "benchmark-nifty-midcap-100",
+    name: "NIFTY MIDCAP 100",
+    sector: "NSE Benchmark",
+    marketCap: "Mid",
+    description: "Benchmark index capturing movement and performance of the top 100 mid-cap companies on NSE.",
+    isBenchmark: true,
+    symbol: "NIFTY_MIDCAP_100",
+    tickers: ["NIFTY_MIDCAP_100"]
+  },
+  {
+    id: "benchmark-nifty-smallcap-100",
+    name: "NIFTY SMALLCAP 100",
+    sector: "NSE Benchmark",
+    marketCap: "Small",
+    description: "Benchmark index tracking performance of the top 100 small-cap growth companies on NSE.",
+    isBenchmark: true,
+    symbol: "NIFTY_SMALLCAP_100",
+    tickers: ["NIFTY_SMALLCAP_100"]
+  }
+];
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    DEFAULT_INDUSTRIES: window.DEFAULT_INDUSTRIES,
+    BENCHMARK_INDICES: window.BENCHMARK_INDICES
+  };
+}

@@ -6,8 +6,10 @@
 class IndustryTrendApp {
   constructor() {
     this.industries = [];
+    this.benchmarks = window.BENCHMARK_INDICES || [];
     this.customOverrides = {};
     this.industryDataCache = new Map();
+    this.benchmarkDataCache = new Map();
     this.stockCandlesMap = {};
 
     this.currentCapFilter = "All";
@@ -33,6 +35,7 @@ class IndustryTrendApp {
     this.applyTheme(this.theme);
     this.loadCustomOverrides();
     this.industries = this.mergeIndustries();
+    this.benchmarks = window.BENCHMARK_INDICES || [];
     this.setupEventListeners();
     this.renderViewSwitcher();
     this.renderIndustries();
@@ -175,6 +178,23 @@ class IndustryTrendApp {
 
     if (progressContainer) progressContainer.style.display = "block";
 
+    // 1. Eagerly sync benchmark index candles first for instant display
+    if (this.benchmarks && this.benchmarks.length > 0) {
+      await Promise.all(
+        this.benchmarks.map(async (bm) => {
+          try {
+            const sym = bm.tickers[0];
+            const candles = await window.DataService.getStockCandles(sym, forceRefresh);
+            if (candles) this.stockCandlesMap[sym] = candles;
+          } catch (e) {
+            console.warn("Benchmark sync error:", e);
+          }
+        })
+      );
+      this.recomputeBenchmarks();
+      this.renderIndustries();
+    }
+
     const allSymbols = new Set();
     this.industries.forEach(ind => ind.tickers.forEach(t => allSymbols.add(t)));
     const symbolsArray = Array.from(allSymbols);
@@ -217,6 +237,15 @@ class IndustryTrendApp {
     this.industries.forEach(ind => {
       const result = window.TechMath.computeIndustryTrend(ind.tickers, this.stockCandlesMap);
       if (result) this.industryDataCache.set(ind.id, result);
+    });
+    this.recomputeBenchmarks();
+  }
+
+  recomputeBenchmarks() {
+    if (!this.benchmarks) return;
+    this.benchmarks.forEach(bm => {
+      const result = window.TechMath.computeIndustryTrend(bm.tickers, this.stockCandlesMap);
+      if (result) this.benchmarkDataCache.set(bm.id, result);
     });
   }
 
@@ -308,13 +337,174 @@ class IndustryTrendApp {
     document.getElementById("statTopIndustry").textContent = topIndustry ? `${topIndustry} (${topReturn > 0 ? '+' : ''}${topReturn}%)` : "--";
   }
 
+  getFilteredBenchmarks() {
+    if (!this.benchmarks) return [];
+    if (this.searchQuery) {
+      const q = this.searchQuery;
+      const bmMatches = this.benchmarks.filter(bm =>
+        bm.name.toLowerCase().includes(q) ||
+        bm.sector.toLowerCase().includes(q) ||
+        bm.marketCap.toLowerCase().includes(q) ||
+        "benchmark".includes(q) ||
+        "nifty".includes(q) ||
+        "index".includes(q)
+      );
+      if (bmMatches.length === 0) return [];
+      return bmMatches.filter(bm => this.currentCapFilter === "All" || bm.marketCap === this.currentCapFilter);
+    }
+
+    return this.benchmarks.filter(bm => {
+      if (this.currentCapFilter === "All") return true;
+      return bm.marketCap === this.currentCapFilter;
+    });
+  }
+
+  getCapBreadthPct(cap) {
+    const matching = this.industries.filter(i => i.marketCap === cap);
+    let sumBreadth = 0;
+    let count = 0;
+    matching.forEach(ind => {
+      const data = this.industryDataCache.get(ind.id);
+      if (data && data.metrics) {
+        sumBreadth += data.metrics.breadthPct;
+        count++;
+      }
+    });
+    return count > 0 ? Math.round(sumBreadth / count) : null;
+  }
+
+  createBenchmarkRowHTML(bm) {
+    const data = this.benchmarkDataCache.get(bm.id);
+    const metrics = data?.metrics;
+    const capClass = `badge-${bm.marketCap.toLowerCase()}`;
+    const trend = metrics?.trend || "SYNCING";
+    const trendBadgeClass = trend.includes("BULL") ? "badge-bullish" : trend.includes("BEAR") ? "badge-bearish" : "badge-neutral";
+
+    const capBreadth = this.getCapBreadthPct(bm.marketCap);
+    const breadthDisplay = capBreadth !== null ? `${capBreadth}%` : (metrics ? `${metrics.breadthPct}%` : '--');
+
+    return `
+      <tr class="benchmark-row" data-id="${bm.id}">
+        <td>
+          <div class="table-industry-title">
+            <span class="benchmark-pin-icon" title="Pinned Benchmark Index">📌</span>
+            <span>${bm.name}</span>
+          </div>
+          <span style="font-size:11px; color:var(--text-muted);">${bm.sector}</span>
+        </td>
+        <td><span class="badge ${capClass}">${bm.marketCap}</span></td>
+        <td><span class="badge ${trendBadgeClass}">${trend.replace('_', ' ')}</span></td>
+        <td class="table-num ${metrics?.pctDiff50 >= 0 ? 'metric-positive' : 'metric-negative'}">
+          ${metrics ? `${metrics.pctDiff50 >= 0 ? '+' : ''}${metrics.pctDiff50}%` : '--'}
+        </td>
+        <td class="table-num ${metrics?.pctDiff200 >= 0 ? 'metric-positive' : 'metric-negative'}">
+          ${metrics ? `${metrics.pctDiff200 >= 0 ? '+' : ''}${metrics.pctDiff200}%` : '--'}
+        </td>
+        <td class="table-num ${metrics?.ret1M >= 0 ? 'metric-positive' : 'metric-negative'}">
+          ${metrics ? `${metrics.ret1M >= 0 ? '+' : ''}${metrics.ret1M}%` : '--'}
+        </td>
+        <td class="table-num" title="Overall ${bm.marketCap} Cap breadth above 50 DMA">
+          ${breadthDisplay}
+        </td>
+        <td><span class="stock-chip">Index</span></td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm view-chart-btn" data-id="${bm.id}">Chart</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  createBenchmarkCardHTML(bm) {
+    const data = this.benchmarkDataCache.get(bm.id);
+    const metrics = data?.metrics;
+    const capClass = `badge-${bm.marketCap.toLowerCase()}`;
+    const trend = metrics?.trend || "SYNCING";
+    const trendBadgeClass = trend.includes("BULL") ? "badge-bullish" : trend.includes("BEAR") ? "badge-bearish" : "badge-neutral";
+
+    const dma50Diff = metrics ? `${metrics.pctDiff50 >= 0 ? '+' : ''}${metrics.pctDiff50}%` : "--";
+    const dma200Diff = metrics ? `${metrics.pctDiff200 >= 0 ? '+' : ''}${metrics.pctDiff200}%` : "--";
+    const dma50Val = metrics?.dma50 ? `₹${metrics.dma50}` : "--";
+    const dma200Val = metrics?.dma200 ? `₹${metrics.dma200}` : "--";
+    const ret1M = metrics ? `${metrics.ret1M >= 0 ? '+' : ''}${metrics.ret1M}%` : "--";
+    const capBreadth = this.getCapBreadthPct(bm.marketCap);
+    const breadthPct = capBreadth !== null ? `${capBreadth}%` : (metrics ? `${metrics.breadthPct}%` : "0%");
+
+    return `
+      <div class="industry-card benchmark-card" data-id="${bm.id}">
+        <div class="card-top">
+          <div class="card-title-group">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="benchmark-pin-icon">📌</span>
+              <h3 class="industry-name">${bm.name}</h3>
+            </div>
+            <p class="industry-desc">${bm.description}</p>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+            <span class="badge badge-benchmark">BENCHMARK</span>
+            <span class="badge ${capClass}">${bm.marketCap} Cap</span>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="badge ${trendBadgeClass}">${trend.replace('_', ' ')}</span>
+          <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">
+            1M Return: <strong class="${metrics?.ret1M >= 0 ? 'metric-positive' : 'metric-negative'}">${ret1M}</strong>
+          </span>
+        </div>
+
+        <div class="dma-metrics-grid">
+          <div class="dma-metric-item">
+            <div class="dma-metric-label">
+              <span class="dot-indicator dot-50"></span> 50 DMA
+            </div>
+            <div class="dma-metric-value ${metrics?.pctDiff50 >= 0 ? 'metric-positive' : 'metric-negative'}">
+              ${dma50Diff}
+            </div>
+            <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono);">${dma50Val}</span>
+          </div>
+
+          <div class="dma-metric-item">
+            <div class="dma-metric-label">
+              <span class="dot-indicator dot-200"></span> 200 DMA
+            </div>
+            <div class="dma-metric-value ${metrics?.pctDiff200 >= 0 ? 'metric-positive' : 'metric-negative'}">
+              ${dma200Diff}
+            </div>
+            <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono);">${dma200Val}</span>
+          </div>
+        </div>
+
+        <div class="breadth-meter">
+          <div class="breadth-header">
+            <span>${bm.marketCap} Cap Breadth</span>
+            <span class="breadth-val">${breadthPct}</span>
+          </div>
+          <div class="breadth-bar-track">
+            <div class="breadth-bar-fill" style="width: ${breadthPct};"></div>
+          </div>
+        </div>
+
+        <div class="constituents-preview" style="max-height:30px;">
+          <span class="stock-chip" style="background:rgba(99,102,241,0.15); border-color:rgba(99,102,241,0.3); color:#818cf8; font-weight:700;">BROADER MARKET BENCHMARK INDEX</span>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-primary btn-sm view-chart-btn" data-id="${bm.id}">View Benchmark Chart</button>
+        </div>
+      </div>
+    `;
+  }
+
   renderIndustries() {
     const container = document.getElementById("industriesContainer");
     if (!container) return;
 
+    const benchmarks = this.getFilteredBenchmarks();
     const filtered = this.getFilteredAndSortedIndustries();
 
-    if (filtered.length === 0) {
+    if (benchmarks.length === 0 && filtered.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <h3>No industries match your search criteria</h3>
@@ -327,6 +517,7 @@ class IndustryTrendApp {
     if (this.currentView === "cards") {
       container.innerHTML = `
         <div class="industries-grid">
+          ${benchmarks.map(bm => this.createBenchmarkCardHTML(bm)).join("")}
           ${filtered.map(ind => this.createCardHTML(ind)).join("")}
         </div>
       `;
@@ -388,6 +579,7 @@ class IndustryTrendApp {
               </tr>
             </thead>
             <tbody>
+              ${benchmarks.map(bm => this.createBenchmarkRowHTML(bm)).join("")}
               ${filtered.map(ind => this.createRowHTML(ind)).join("")}
             </tbody>
           </table>
@@ -557,19 +749,26 @@ class IndustryTrendApp {
      TRADINGVIEW LIGHTWEIGHT CHARTS INTEGRATION
      ========================================================================== */
   openChartModal(industryId) {
-    const ind = this.industries.find(i => i.id === industryId);
+    let ind = this.industries.find(i => i.id === industryId);
+    let isBenchmark = false;
+    if (!ind) {
+      ind = this.benchmarks.find(b => b.id === industryId);
+      isBenchmark = true;
+    }
     if (!ind) return;
 
     this.activeChartIndustry = ind;
     const modal = document.getElementById("chartModal");
     if (!modal) return;
 
-    const data = this.industryDataCache.get(ind.id);
+    const data = isBenchmark ? this.benchmarkDataCache.get(ind.id) : this.industryDataCache.get(ind.id);
     const metrics = data?.metrics;
 
     document.getElementById("chartModalTitle").textContent = ind.name;
-    const formulaText = `(${ind.tickers.map(t => t.replace('.NS', '')).join('+')})/${ind.tickers.length}`;
-    document.getElementById("chartModalDesc").textContent = `TradingView Formula: ${formulaText} • ${ind.marketCap} Cap • ${ind.sector}`;
+    const formulaText = isBenchmark 
+      ? `Broader Market Benchmark Index (${ind.name})`
+      : `TradingView Formula: (${ind.tickers.map(t => t.replace('.NS', '')).join('+')})/${ind.tickers.length}`;
+    document.getElementById("chartModalDesc").textContent = `${formulaText} • ${ind.marketCap} Cap • ${ind.sector}`;
 
     document.getElementById("cStatPrice").textContent = metrics ? `₹${metrics.latestValue}` : "--";
     document.getElementById("cStatDma50").textContent = metrics ? `₹${metrics.dma50}` : "--";
@@ -583,7 +782,12 @@ class IndustryTrendApp {
     d200El.textContent = metrics ? `${metrics.pctDiff200 >= 0 ? '+' : ''}${metrics.pctDiff200}%` : "--";
     d200El.className = `val ${metrics?.pctDiff200 >= 0 ? 'metric-positive' : 'metric-negative'}`;
 
-    document.getElementById("cStatBreadth").textContent = metrics ? `${metrics.breadthPct}% (${metrics.stocksAbove50Count}/${metrics.totalConstituents})` : "--";
+    if (isBenchmark) {
+      const capBreadth = this.getCapBreadthPct(ind.marketCap);
+      document.getElementById("cStatBreadth").textContent = capBreadth !== null ? `${capBreadth}% (${ind.marketCap} Cap Universe)` : "--";
+    } else {
+      document.getElementById("cStatBreadth").textContent = metrics ? `${metrics.breadthPct}% (${metrics.stocksAbove50Count}/${metrics.totalConstituents})` : "--";
+    }
 
     modal.classList.add("active");
 
@@ -619,7 +823,7 @@ class IndustryTrendApp {
     const ind = this.activeChartIndustry;
     if (!ind) return;
 
-    const data = this.industryDataCache.get(ind.id);
+    const data = ind.isBenchmark ? this.benchmarkDataCache.get(ind.id) : this.industryDataCache.get(ind.id);
     const container = document.querySelector(".chart-canvas-container");
     if (!container || !data) return;
 
@@ -745,7 +949,9 @@ class IndustryTrendApp {
 
   applyRangeSelection() {
     if (!this.tvChart || !this.activeChartIndustry) return;
-    const data = this.industryDataCache.get(this.activeChartIndustry.id);
+    const data = this.activeChartIndustry.isBenchmark
+      ? this.benchmarkDataCache.get(this.activeChartIndustry.id)
+      : this.industryDataCache.get(this.activeChartIndustry.id);
     if (!data) return;
 
     const series = this.chartInterval === "1W" ? data.weekly : data.daily;
